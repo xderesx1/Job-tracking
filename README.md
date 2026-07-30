@@ -44,21 +44,25 @@ Docker (для интеграционных тестов)
 
 **Установка**
 
-# Клонировать репозиторийgit clone https://github.com/xderesx1/Job-tracking.gitcd job-recommender# Собрать проект./gradlew build# Запустить CLI-версию./gradlew run# Запустить Spring Boot API./gradlew bootRun
-📖 Использование
+Клонировать репозиторийgit clone https://github.com/xderesx1/Job-tracking.gitcd job-recommender 
+Собрать проект./gradlew build
+Запустить CLI-версию./gradlew run
+Запустить Spring Boot API./gradlew bootRun
+
+📖 **Использование**
 
 CLI-интерфейс
 
-# Создать пользователяuser alice --skills=java,spring,linux --exp=2user bob --skills=python,django,ml --exp=5
-# Создать вакансиюjob Backend_Dev --company=VK --tags=java,spring,linux --exp=1job ML_Engineer --company=Google --tags=ml,python,tensorflow --exp=3
-# Получить рекомендации (топ-2) suggest alice
-# Список пользователей/вакансийm user-listjob-list
-# Статистика stat               
-# вакансии с опытом >= 2  --exp 2           
-# пользователи с >= 1 мэтчем stat --match     
-# топ-3 навыков stat --top-skills 3  
-# История команд history 
-# Выход exit
+Создать пользователяuser alice --skills=java,spring,linux --exp=2user bob --skills=python,django,ml --exp=5
+Создать вакансиюjob Backend_Dev --company=VK --tags=java,spring,linux --exp=1job ML_Engineer --company=Google --tags=ml,python,tensorflow --exp=3
+Получить рекомендации (топ-2) suggest alice
+Список пользователей/вакансийm user-listjob-list
+Статистика stat               
+вакансии с опытом >= 2  --exp 2           
+пользователи с >= 1 мэтчем stat --match     
+топ-3 навыков stat --top-skills 3  
+История команд history 
+Выход exit
 
 **REST API**
 
@@ -74,13 +78,16 @@ GET /api/stat/top-skills/{n} Топ-n навыков
 
 **Примеры запросов**
 
-# Создать пользователя curl -X POST http://localhost:8080/api/users \  -H "Content-Type: application/json" \  -d '{"name":"alice","skills":["java","spring"],"exp":2}'
-# Создать вакансию curl -X POST http://localhost:8080/api/jobs \  -H "Content-Type: application/json" \  -d '{"title":"Backend_Dev","company":"VK","tags":["java","spring"],"exp":1}'
-# Получить рекомендации curl http://localhost:8080/api/suggest/alice# Статистика curl http://localhost:8080/api/stat/exp/2 curl http://localhost:8080/api/stat/top-skills/3
+Создать пользователя curl -X POST http://localhost:8080/api/users \  -H "Content-Type: application/json" \  -d '{"name":"alice","skills":["java","spring"],"exp":2}'
+Создать вакансию curl -X POST http://localhost:8080/api/jobs \  -H "Content-Type: application/json" \  -d '{"title":"Backend_Dev","company":"VK","tags":["java","spring"],"exp":1}'
+Получить рекомендации curl http://localhost:8080/api/suggest/alice# Статистика curl http://localhost:8080/api/stat/exp/2 curl http://localhost:8080/api/stat/top-skills/3
 
 
 🧪 **Тестирование**
-# Запустить все тесты./gradlew test# Только юнит-тесты./gradlew test --tests SuggestServiceUnitTest# Только интеграционные тесты./gradlew test --tests SuggestServiceIntegrationTest# С отчётом о покрытии./gradlew test jacocoTestReport
+Запустить все тесты./gradlew test
+Только юнит-тесты./gradlew test --tests SuggestServiceUnitTest
+Только интеграционные тесты./gradlew test --tests SuggestServiceIntegrationTest
+С отчётом о покрытии./gradlew test jacocoTestReport
 
 Покрытие тестами
 
@@ -89,34 +96,37 @@ GET /api/stat/top-skills/{n} Топ-n навыков
 ⚙️ Конфигурация
 
 application.properties
-
 properties
-
-
-123456789101112
-# База данныхspring.datasource.url=jdbc:postgresql://localhost:5432/job_recommenderspring.datasource.username=postgresspring.datasource.password=your_passwordspring.jpa.hibernate.ddl-auto=updatespring.jpa.show-sql=true# Порт сервераserver.port=8080# Логированиеlogging.level.ru.vk.education=DEBUG
-**Переменные окружения (для Docker)**
-
-export DB_HOST=localhostexport DB_PORT=5432export DB_NAME=job_recommenderexport DB_USER=postgresexport DB_PASSWORD=your_password
 
 **Алгоритм мэтчинга**
 
 java
-
-public double calculateScore(User user) {    // 1. Считаем совпадения навыков пользователя и тегов вакансии    long matches =         user.getSkills().stream()        .filter(this.tags::contains)        .count();        double score = (double) matches;        // 2. Штраф 50% если опыт пользователя меньше требуемого    if (user.getExp() < this.exp) {        score /= 2.0;    }        return score;}
+```
+public double calculateScore(User user){    
+   // 1. Считаем совпадения навыков пользователя и тегов вакансии    
+   long matches = user.getSkills().stream()        
+          .filter(this.tags::contains)        
+          .count();        
+   double score = (double) matches;
+   // 2. Штраф 50% если опыт пользователя меньше требуемого    
+   if (user.getExp() < this.exp) {        
+                 score /= 2.0;    
+   }        
+   return score;
+}
+```
 🎯 **Демонстрация работы**
 
 CLI сессия
 
 $ ./gradlew run> user alice --skills=java,spring --exp=2> job Backend_Dev --company=VK --tags=java,spring --exp=1> suggest aliceBackend_Dev at VK> stat --top-skills 3javaspring> exit
+
 Фоновые уведомления
-
 Каждую минуту в консоли появляется:
-
-
 12
 alice, лучшее предложение — Backend_Dev в VKbob, лучшее предложение — ML_Engineer в Google
-📝 Чему я научился
+
+📝 **Чему я научился**
 
 Архитектура Spring Boot — от монолита к слоистой архитектуре
 Работа с БД — JPA, Hibernate, миграции схемы
