@@ -1,181 +1,472 @@
-# Job Recommender System
+# 💼 Job Tracking
 
-Система рекомендаций вакансий на основе навыков и опыта пользователя. Приложение помогает соискателям находить наиболее релевантные предложения о работе, а работодателям — оценивать соответствие кандидатов требованиям.
+<p align="center">
 
-![Java](https://img.shields.io/badge/Java-17/21-blue.svg?download=true&timestamp=1785396467425)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-green.svg?download=true&timestamp=1785396937709)
-![Postgesql](https://img.shields.io/badge/PostgreSQL-15-blue.svg?download=true&timestamp=1785402412539)
-![Gradle](https://img.shields.io/badge/Gradle-8.x-orange.svg?download=true&timestamp=1785402533269)
+![Java](https://img.shields.io/badge/Java-17+-orange?style=for-the-badge&logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=springboot)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791?style=for-the-badge&logo=postgresql)
+![JUnit 5](https://img.shields.io/badge/JUnit_5-Testing-red?style=for-the-badge&logo=junit5)
+![Mockito](https://img.shields.io/badge/Mockito-Mocking-success?style=for-the-badge)
+![Testcontainers](https://img.shields.io/badge/Testcontainers-Integration_Test-2496ED?style=for-the-badge&logo=docker)
 
-🎯 **Основные возможности**
+</p>
 
-✅ CLI-интерфейс — управление через консольные команды
+---
 
-✅ REST API — HTTP-эндпоинты для интеграции с фронтендом
+# 📖 О проекте
 
-✅ Алгоритм мэтчинга — расчёт релевантности вакансии на основе навыков и опыта
+**Job Tracking** — backend-приложение на **Java** и **Spring Boot**, предназначенное для хранения пользователей и вакансий, подбора наиболее подходящих предложений по навыкам и опыту, получения статистики и автоматического поиска лучших вакансий.
 
-✅ Асинхронные уведомления — фоновый поиск лучших предложений каждые 60 секунд
+Проект демонстрирует использование современной архитектуры backend-приложений, работу с PostgreSQL, REST API, многопоточность и покрытие бизнес-логики тестами.
 
-✅ История команд — сохранение и загрузка команд из файла
+---
 
-✅ Статистика — топ навыков, вакансии по опыту, пользователи с мэтчами
+# 🚀 Возможности
 
-✅ Тесты — юнит-тесты (Mockito) и интеграционные (Testcontainers)
+## 👤 Управление пользователями
 
-🛠 **Технологический стек**
- 
-Язык Java 17/21
+- создание пользователей;
+- хранение навыков и опыта работы;
+- получение информации о пользователях;
+- просмотр списка пользователей.
 
-Фреймворк Spring Boot 3.2
+---
 
-База данных PostgreSQL 15
+## 💼 Управление вакансиями
 
-Сборка Gradle 8.x
+- создание вакансий;
+- хранение информации о компании;
+- указание требуемого опыта;
+- хранение списка необходимых технологий;
+- просмотр всех вакансий.
 
-Тестирование JUnit 5, Mockito, Testcontainers
+---
 
-Контейнеризация Docker, Testcontainers
+## 🎯 Подбор вакансий
 
-Дополнительно Stream API, ExecutorService, Scheduled Tasks
+Для каждого пользователя система автоматически вычисляет наиболее подходящие вакансии.
 
-**Принципы проектирования**
+Во время расчёта учитываются:
 
-Tell Don't Ask — логика мэтчинга инкапсулирована в Job.calculateScore()
+- совпадение навыков пользователя и требований вакансии;
+- необходимый опыт работы.
 
-Separation of Concerns — контроллеры → сервисы → репозитории
+Если опыта недостаточно, итоговый рейтинг вакансии уменьшается.
 
-Dependency Injection — аннотации Spring @Autowired, @Service, @Repository
+После вычисления вакансии сортируются по рейтингу и пользователю возвращаются наиболее подходящие предложения.
 
-SOLID — каждый класс отвечает за одну задачу
+---
 
-🚀 **Быстрый старт**
+## 📊 Статистика
 
-**Требования**
+Доступны различные виды аналитики:
 
-Java 17 или выше
+- вакансии с минимальным требуемым опытом;
+- пользователи, подходящие под заданное количество вакансий;
+- наиболее популярные навыки пользователей.
 
-Gradle 8.x
+---
 
-PostgreSQL (для продакшена)
+## ⏰ Автоматический поиск лучшего предложения
 
-Docker (для интеграционных тестов)
+После запуска приложения автоматически запускается планировщик задач.
 
-**Установка**
+Каждые **60 секунд** система:
 
-Клонировать репозиторий git clone https://github.com/xderesx1/Job-tracking.gitcd job-recommender 
+- проходит по всем пользователям;
+- вычисляет наиболее подходящую вакансию;
+- выводит рекомендацию в консоль.
 
-Собрать проект./gradlew build
+---
 
-Запустить CLI-версию ./gradlew run
+## 💾 История команд
 
-Запустить Spring Boot API ./gradlew bootRun
+Приложение автоматически:
 
-📖 **Использование**
+- сохраняет введённые команды;
+- восстанавливает данные после перезапуска;
+- позволяет просмотреть историю выполненных команд.
 
-CLI-интерфейс
+---
 
-Создать пользователя user alice --skills=java,spring,linux --exp=2user bob --skills=python,django,ml --exp=5
-Создать вакансию job Backend_Dev --company=VK --tags=java,spring,linux --exp=1job ML_Engineer --company=Google --tags=ml,python,tensorflow --exp=3
-Получить рекомендации (топ-2) suggest alice
-Список пользователей/вакансий m user-listjob-list
-Статистика stat               
-Вакансии с опытом >= 2  --exp 2           
-Пользователи с >= 1 мэтчем stat --match     
-Топ-3 навыков stat --top-skills 3  
-История команд history 
-Выход exit
+# 🏗 Архитектура проекта
 
-**REST API**
+Проект построен по многослойной архитектуре.
 
-Метод Эндпоинт Описание
-
-POST /api/users Создать пользователя
-
-GET /api/users Список пользователей
-
-POST /api/jobs Создать вакансию
-
-GET /api/jobs Список вакансий
-
-GET /api/suggest/{username} Рекомендации для пользователя
-
-GET /api/stat/exp/{n} Вакансии с опытом >= n
-
-GET /api/stat/match/{n} Пользователи с >= n мэтчами
-
-GET /api/stat/top-skills/{n} Топ-n навыков
-
-**Примеры запросов**
-
-Создать пользователя curl -X POST http://localhost:8080/api/users \  -H "Content-Type: application/json" \  -d '{"name":"alice","skills":["java","spring"],"exp":2}'
-
-Создать вакансию curl -X POST http://localhost:8080/api/jobs \  -H "Content-Type: application/json" \  -d '{"title":"Backend_Dev","company":"VK","tags":["java","spring"],"exp":1}'
-
-Получить рекомендации curl http://localhost:8080/api/suggest/alice# Статистика curl http://localhost:8080/api/stat/exp/2 curl http://localhost:8080/api/stat/top-skills/3
-
-
-🧪 **Тестирование**
-
-Запустить все тесты./gradlew test
-
-Только юнит-тесты./gradlew test --tests SuggestServiceUnitTest
-
-Только интеграционные тесты./gradlew test --tests SuggestServiceIntegrationTest
-
-С отчётом о покрытии./gradlew test jacocoTestReport
-
-Покрытие тестами
-
-✅ Юнит-тесты: 4 сценария (обычный, пустые вакансии, одна вакансия, пользователь не найден)
-
-✅ Интеграционные тесты: реальная БД через Testcontainers + PostgreSQL
-
-⚙️ Конфигурация
-
-application.properties
-
-properties
-
-**Алгоритм мэтчинга**
-
-java
 ```
-public double calculateScore(User user){    
-   // 1. Считаем совпадения навыков пользователя и тегов вакансии    
-   long matches = user.getSkills().stream()        
-          .filter(this.tags::contains)        
-          .count();        
-   double score = (double) matches;
-   // 2. Штраф 50% если опыт пользователя меньше требуемого    
-   if (user.getExp() < this.exp) {        
-                 score /= 2.0;    
-   }        
-   return score;
+Клиент
+   │
+   ▼
+Контроллеры
+   │
+   ▼
+Сервисы
+   │
+   ▼
+Репозитории
+   │
+   ▼
+ PostgreSQL
+```
+
+### Структура проекта
+
+```
+src
+├── controller
+│
+├── domain
+│   ├── Job
+│   └── User
+│
+├── repository
+│   ├── JobRepository
+│   └── UserRepository
+│
+├── service
+│   ├── JobService
+│   ├── UserService
+│   ├── SuggestService
+│   ├── StatService
+│   └── BestOfferScheduler
+│
+├── scheduler
+│
+└── test
+    ├── Unit Tests
+    └── Integration Tests
+```
+
+---
+
+# 🛠 Используемые технологии
+
+- Java
+- Spring Boot
+- Spring Web
+- Spring JDBC
+- PostgreSQL
+- SQL
+- Maven
+- REST API
+- JUnit 5
+- Mockito
+- Testcontainers
+- Docker
+- ExecutorService
+- ScheduledExecutorService
+- Java Stream API
+
+---
+
+# 🗄 База данных
+
+Приложение использует **PostgreSQL**.
+
+### Таблица пользователей
+
+| Поле | Описание |
+|------|----------|
+| name | Имя пользователя |
+| exp | Опыт работы |
+| skills | Навыки |
+
+---
+
+### Таблица вакансий
+
+| Поле | Описание |
+|------|----------|
+| title | Название вакансии |
+| company | Компания |
+| exp | Требуемый опыт |
+| tags | Требуемые технологии |
+
+---
+
+# 📡 REST API
+
+## Пользователи
+
+### Создание пользователя
+
+```http
+POST /api/users
+```
+
+Пример:
+
+```json
+{
+  "name": "Alex",
+  "exp": 3,
+  "skills": [
+    "Java",
+    "Spring",
+    "PostgreSQL"
+  ]
 }
 ```
-🎯 **Демонстрация работы**
 
-CLI сессия
+---
 
-$ ./gradlew run> user alice --skills=java,spring --exp=2> job Backend_Dev --company=VK --tags=java,spring --exp=1> suggest aliceBackend_Dev at VK> stat --top-skills 3javaspring> exit
+### Получить всех пользователей
 
-Фоновые уведомления
+```http
+GET /api/users
+```
 
-Каждую минуту в консоли появляется:
+---
 
-12
+### Получить пользователя
 
-alice, лучшее предложение — Backend_Dev в VKbob, лучшее предложение — ML_Engineer в Google
+```http
+GET /api/users/{name}
+```
 
-📝 **Чему я научился**
+---
 
-Архитектура Spring Boot — от монолита к слоистой архитектуре
+## Вакансии
 
-Работа с БД — JPA, Hibernate, миграции схемы
+### Создание вакансии
 
-Асинхронность — @Scheduled, ExecutorService, потокобезопасность
+```http
+POST /api/jobs
+```
 
-Тестирование — пирамида тестов, моки, интеграционные тесты
+Пример:
 
-Отладка — чтение логов, диагностика Docker-проблем, анализ stack trace
+```json
+{
+  "title": "Java Developer",
+  "company": "VK",
+  "exp": 2,
+  "tags": [
+    "Java",
+    "Spring",
+    "PostgreSQL"
+  ]
+}
+```
+
+---
+
+### Получить список вакансий
+
+```http
+GET /api/jobs
+```
+
+---
+
+### Получить вакансию
+
+```http
+GET /api/jobs/{title}
+```
+
+---
+
+## Подбор вакансий
+
+Получить рекомендации:
+
+```http
+GET /api/suggest/{username}
+```
+
+Возвращает наиболее подходящие вакансии для указанного пользователя.
+
+---
+
+## Статистика
+
+Вакансии с минимальным опытом
+
+```http
+GET /api/stat/exp/{exp}
+```
+
+---
+
+Пользователи с заданным количеством совпадений
+
+```http
+GET /api/stat/match/{count}
+```
+
+---
+
+Самые популярные навыки
+
+```http
+GET /api/stat/top-skills/{count}
+```
+
+---
+
+# 🧠 Алгоритм подбора
+
+Для каждой вакансии вычисляется рейтинг.
+
+Он зависит от:
+
+- количества совпавших навыков;
+- опыта пользователя.
+
+Если опыта пользователя недостаточно:
+
+```text
+рейтинг = рейтинг / 2
+```
+
+После вычисления вакансии сортируются по рейтингу, и пользователю предлагаются наиболее подходящие варианты.
+
+---
+
+# 🧪 Тестирование
+
+Проект содержит как **модульные**, так и **интеграционные** тесты.
+
+### Unit-тесты
+
+Используются:
+
+- JUnit 5
+- Mockito
+
+Проверяются:
+
+- логика подбора вакансий;
+- отсутствие вакансий;
+- отсутствие пользователя;
+- сценарий с одной вакансией;
+- корректность ранжирования результатов.
+
+---
+
+### Интеграционные тесты
+
+Используются:
+
+- Spring Boot Test;
+- Testcontainers;
+- PostgreSQL в Docker-контейнере.
+
+Проверяется:
+
+- работа репозиториев;
+- взаимодействие с базой данных;
+- сервис рекомендаций;
+- выполнение SQL-запросов.
+
+---
+
+# ⭐ Основные возможности проекта
+
+- REST API
+- PostgreSQL
+- Spring Boot
+- Spring JDBC
+- Repository Pattern
+- Service Layer
+- Подбор вакансий
+- Аналитика
+- Работа с файлами
+- История команд
+- Планировщик задач
+- Многопоточность
+- Java Streams
+- Unit Testing
+- Integration Testing
+
+---
+
+# ▶ Запуск проекта
+
+### Клонировать репозиторий
+
+```bash
+git clone https://github.com/xderesx1/Job-tracking.git
+```
+
+### Перейти в папку проекта
+
+```bash
+cd Job-tracking
+```
+
+### Запустить приложение
+
+```bash
+mvn spring-boot:run
+```
+
+или
+
+```bash
+./mvnw spring-boot:run
+```
+
+---
+
+# 🧪 Запуск тестов
+
+```bash
+mvn test
+```
+
+---
+
+# 🚀 Возможные улучшения
+
+- авторизация пользователей (JWT);
+- Spring Security;
+- Swagger / OpenAPI;
+- Docker Compose;
+- GitHub Actions (CI/CD);
+- Kubernetes;
+- пагинация;
+- фильтрация вакансий;
+- кэширование;
+- логирование;
+- мониторинг;
+- отправка уведомлений по электронной почте.
+
+---
+
+# 💡 Что демонстрирует проект
+
+Проект показывает навыки работы с:
+
+- Java;
+- Spring Boot;
+- REST API;
+- PostgreSQL;
+- SQL;
+- многослойной архитектурой;
+- Repository Pattern;
+- Service Layer;
+- Java Collections;
+- Stream API;
+- многопоточностью;
+- планировщиком задач;
+- модульным тестированием;
+- интеграционным тестированием;
+- Testcontainers;
+- Docker.
+
+---
+
+# 👨‍💻 Автор
+
+**deres**
+
+GitHub:  
+👉 **https://github.com/xderesx1**
+
+---
+
+# ⭐ Поддержка
+
+Если проект оказался полезным или интересным, поставьте ⭐ репозиторию на GitHub.
