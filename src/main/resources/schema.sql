@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS users (
+    name VARCHAR(255) PRIMARY KEY,
+    exp INT NOT NULL DEFAULT 0,
+    skills TEXT DEFAULT ''
+);
+
+CREATE TABLE IF NOT EXISTS jobs (
+    title VARCHAR(255) PRIMARY KEY,
+    company VARCHAR(255),
+    exp INT NOT NULL DEFAULT 0,
+    tags TEXT DEFAULT ''
+);
